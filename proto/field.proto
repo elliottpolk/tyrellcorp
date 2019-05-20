@@ -1,0 +1,27 @@
+syntax = "proto3";
+package tyrellcorp;
+
+option go_package = "github.com/elliottpolk/tyrellcorp;tyrellcorp";
+option java_multiple_files = true;
+option java_outer_classname = "FieldProto";
+option java_package = "com.elliottpolk.tyrellcorp";
+
+message Field {
+    // the name of the field
+    string name = 1;
+
+    // the description of what the field is - will be output as a comment
+    string description = 2;
+
+    // the data type of the field
+    string type = 3;
+
+    // this is the "field number" used for protobufs
+    int32 sequence = 4;
+
+    // is this field a list
+    bool is_list = 5;
+
+    // is this a field used in identifying uniqueness
+    bool is_key = 6;
+}

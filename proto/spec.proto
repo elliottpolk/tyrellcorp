@@ -1,0 +1,39 @@
+syntax = "proto3";
+package tyrellcorp;
+
+import "field.proto";
+import "record.proto";
+
+option go_package = "github.com/elliottpolk/tyrellcorp;tyrellcorp";
+option java_multiple_files = true;
+option java_outer_classname = "SpecProto";
+option java_package = "com.elliottpolk.tyrellcorp";
+
+message Spec {
+    // standard record values
+    tyrellcorp.RecordInfo record_info = 1;
+
+    // history of the stored record
+    repeated tyrellcorp.Spec history = 2;
+
+    // additional metadata of model
+    repeated string tags = 3;
+
+    // a friendly name of the spec
+    string name = 4;
+
+    // the package name - this will be prepended with `com.elliottpolk`
+    string package = 5;
+
+    // the git repository (including the user | group) the source code will live in
+    string repository = 6;
+
+    // the list of fields for the model
+    repeated tyrellcorp.Field fields = 7;
+
+    // flags to specify CRUD features that should be included
+    bool create = 8;
+    bool retrieve = 9;
+    bool update = 10;
+    bool delete = 11;
+}
