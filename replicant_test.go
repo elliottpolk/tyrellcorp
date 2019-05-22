@@ -27,4 +27,7 @@ func TestGenReplicant(t *testing.T) {
 	if err := GenerateReplicant(nexus); err != nil {
 		t.Fatal(err)
 	}
+
+	// TODO:
+	// - include checks on generated content
 }
