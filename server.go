@@ -161,11 +161,9 @@ func (s *Server) Delete(c context.Context, r *SpecRequest) (*Empty, error) {
 		return empty, errors.Wrap(err, "unable verify connection to datastore")
 	}
 
-	// TODO:
-
-	// if err := Delete(r.Payload, client.Database(repo)); err != nil {
-	// 	return empty, err
-	// }
+	if err := Delete(c, r.Username, r.Payload, client.Database(repo)); err != nil {
+		return empty, err
+	}
 
 	return empty, nil
 }
