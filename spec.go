@@ -96,39 +96,54 @@ func Retrieve(ctx context.Context, filter bson.D, db *mongo.Database) ([]*Spec, 
 }
 
 // Update ...
-func Update(ctx context.Context, user string, filter bson.D, items []*Spec, db *mongo.Database) error {
+func Update(ctx context.Context, user string, spec *Spec, db *mongo.Database) error {
 	// ensure the user provided a username in an attempt to audit
 	if len(user) < 1 {
 		return ErrInvalidUsername
 	}
 
+	if len(spec.Id) < 1 {
+		return ErrInvalidId
+	}
+
+	prev, err := RetrieveOne(ctx, spec.Id, db)
+	if err != nil {
+		return errors.Wrapf(err, "unable to retrieve existing record for %s", spec.Id)
+	}
+
+	if prev == nil {
+		return errors.Wrapf(err, "unable to retrieve existing record for %s", spec.Id)
+	}
+
+	if spec.History == nil {
+		spec.History = make([]*Spec, len(prev.History))
+	}
+	copy(spec.History, prev.History)
+
+	prev.History = nil
+	spec.History = append(spec.History, prev)
+
+	// TODO:
+	// - check for previous item with id
+	// - append to history field if found
+
 	log.WithFields(log.Fields{
 		"user":        user,
 		"action_type": "update",
-	}).Infof("attempting to update %d records", len(items))
+	}).Infof("attempting to update record with ID %s", spec.Id)
 
-	count := int64(0)
-	for _, item := range items {
-		item.RecordInfo.Updated = &timestamp.Timestamp{Seconds: time.Now().Unix()}
+	spec.RecordInfo.Updated = &timestamp.Timestamp{Seconds: time.Now().Unix()}
+	spec.RecordInfo.UpdatedBy = user
 
-		res, err := db.Collection(repo).ReplaceOne(ctx, filter, item)
-		if res != nil {
-			count += res.ModifiedCount
-		}
-
-		if err != nil {
-			return errors.Wrapf(err, "update: expected %d - actually %d", len(items), count)
-		}
-	}
-
-	if want, got := int64(len(items)), count; got < want {
-		return errors.Wrapf(ErrIncompleteAction, "update: expected %d - actually %d", want, got)
+	res, err := db.Collection(repo).ReplaceOne(ctx, bson.D{{"_id", spec.Id}}, spec)
+	if res != nil {
+		return err
 	}
 
 	log.WithFields(log.Fields{
 		"user":        user,
 		"action_type": "update",
-	}).Infof("updated %d records", len(items))
+	}).Infof("updated record %s", spec.Id)
 
 	return nil
 }

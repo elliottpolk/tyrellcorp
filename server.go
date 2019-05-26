@@ -32,14 +32,13 @@ func (s *Server) Create(c context.Context, r *SpecRequest) (*Empty, error) {
 	empty := &Empty{RequestId: r.RequestId}
 
 	if s.client == nil {
-		return empty, errors.New("no valid mongo client")
+		return empty, ErrNoValidMongoClient
 	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
 	client := s.client
-
 	if err := client.Ping(ctx, readpref.Primary()); err != nil {
 		return empty, errors.Wrap(err, "unable verify connection to datastore")
 	}
@@ -119,8 +118,30 @@ func (s *Server) Retrieve(c context.Context, r *SpecRequest) (*SpecResponse, err
 }
 
 // Update ...
-func (s *Server) Update(c context.Context, r *SpecRequest) (*SpecResponse, error) {
-	return nil, nil
+func (s *Server) Update(c context.Context, r *SpecRequest) (*Empty, error) {
+	empty := &Empty{RequestId: r.RequestId}
+
+	if len(r.Payload) < 1 {
+		return empty, errors.New("invalid payload")
+	}
+
+	if s.client == nil {
+		return empty, ErrNoValidMongoClient
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	client := s.client
+	if err := client.Ping(ctx, readpref.Primary()); err != nil {
+		return empty, errors.Wrap(err, "unable verify connection to datastore")
+	}
+
+	if err := Update(c, r.Username, r.Payload[0], client.Database(repo)); err != nil {
+		return empty, errors.Wrap(err, "unable update records")
+	}
+
+	return empty, nil
 }
 
 // Delete ...

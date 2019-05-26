@@ -59,7 +59,7 @@ service SpecService {
   }
   
   // update Spec item(s)
-  rpc Update(SpecRequest) returns (SpecResponse) {
+  rpc Update(SpecRequest) returns (Empty) {
     option (google.api.http) = {
       put: "/api/v1/specs/{id}"
       body: "*"
