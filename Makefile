@@ -49,6 +49,16 @@ proto: ; $(info $(M) running protoc commands...)                    @ ## code ge
 		done
 	@sed -i 's/json:"id,omitempty"/json:"id,omitempty" bson:"_id"/g' spec.pb.go
 
+.PHONY: ui
+ui: build-dir; $(info $(M) prepping UI ...) 						@ ## build and copy the UI
+	@cd ui && npm run build --prod
+	@cp -rf ui/dist/* "${BUILD_DIR}/public"
+
+.PHONY: full-ui
+full-ui: build-dir; $(info $(M) prepping UI ...) 					@ ## install deps, build, and copy the UI
+	@cd ui && npm install && npm run build --prod
+	@cp -rf ui/dist/* "${BUILD_DIR}/public"
+
 .PHONY: help
 help:
 	@grep -E '^[ a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | \

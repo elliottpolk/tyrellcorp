@@ -1,0 +1,76 @@
+syntax = "proto3";
+package tyrellcorp;
+
+import "spec.proto";
+import "google/api/annotations.proto";
+
+option go_package = "github.com/elliottpolk/tyrellcorp;tyrellcorp";
+option java_multiple_files = true;
+option java_outer_classname = "SpecServiceProto";
+option java_package = "com.elliottpolk.tyrellcorp";
+
+message Empty {
+  // unique identifier of the original incoming request to help troubleshoot
+  string request_id = 1;
+}
+
+message SpecRequest {
+  // unique identifier to help troubleshoot each request
+  string request_id = 1;
+
+  // username of the one making the request
+  string username = 2;
+
+  // unique identifier of the tyrellcorp.Spec
+  string id = 3;
+
+  // TODO:
+  // - include whitelisted parameters
+
+  // dataset to process
+  repeated tyrellcorp.Spec payload = 4;
+}
+
+message SpecResponse {
+  // unique identifier of the original incoming request to help troubleshoot
+  string request_id = 1;
+
+  repeated tyrellcorp.Spec payload = 2;
+}
+
+service SpecService {
+  // create new Service item(s)
+  rpc Create(SpecRequest) returns (Empty) {
+    option (google.api.http) = {
+      post: "/api/v1/specs"
+      body: "*"
+    };
+  }
+  
+  // retrieve a list of Spec items
+  rpc Retrieve(SpecRequest) returns (SpecResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/specs"
+
+      additional_bindings {
+        get: "/api/v1/specs/{id}"
+      }
+    };
+  }
+  
+  // update Spec item(s)
+  rpc Update(SpecRequest) returns (SpecResponse) {
+    option (google.api.http) = {
+      put: "/api/v1/specs/{id}"
+      body: "*"
+    };
+  }
+  
+  // delete Spec item(s)
+  rpc Delete(SpecRequest) returns (Empty) {
+    option (google.api.http) = {
+      delete: "/api/v1/specs"
+      body: "*"
+    };
+  }
+}

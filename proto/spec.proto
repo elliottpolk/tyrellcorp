@@ -13,27 +13,33 @@ message Spec {
     // standard record values
     tyrellcorp.RecordInfo record_info = 1;
 
+    // unique identifier
+    string id = 2;
+
     // history of the stored record
-    repeated tyrellcorp.Spec history = 2;
+    repeated tyrellcorp.Spec history = 3;
 
     // additional metadata of model
-    repeated string tags = 3;
+    repeated string tags = 4;
 
     // a friendly name of the spec
-    string name = 4;
+    string name = 5;
 
     // the package name - this will be prepended with `com.elliottpolk`
-    string package = 5;
+    string package = 6;
 
     // the git repository (including the user | group) the source code will live in
-    string repository = 6;
+    string repository = 7;
 
-    // the list of fields for the model
-    repeated tyrellcorp.Field fields = 7;
+    // the list of fields for the replicant
+    repeated tyrellcorp.Field fields = 8;
+
+    // current state of replicant
+    string state = 9;
 
     // flags to specify CRUD features that should be included
-    bool create = 8;
-    bool retrieve = 9;
-    bool update = 10;
-    bool delete = 11;
+    bool create = 10;
+    bool retrieve = 11;
+    bool update = 12;
+    bool delete = 13;
 }

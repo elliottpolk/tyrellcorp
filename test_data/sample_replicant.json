@@ -1,0 +1,45 @@
+{
+	"request_id": "6f393150-f1ea-4b77-bb4c-df7d803ce35d",
+	"username": "test_user",
+	"payload": [
+		{
+			"record_info": {
+				"created_by": "test_user"
+			},
+			"name": "Dope",
+			"package": "Super",
+			"repository": "github.com/elliottpolk",
+			"fields": [
+				{
+					"name": "dope_1",
+					"description": "super dope field 1",
+					"type": "string",
+					"sequence": 3
+				},
+				{
+					"name": "dope_2",
+					"description": "super dope field 2",
+					"type": "int32",
+					"sequence": 4
+				},
+				{
+					"name": "dope_3",
+					"description": "super dope field 3",
+					"type": "string",
+					"sequence": 5,
+					"is_list": true
+				},
+				{
+					"name": "dope_4",
+					"description": "super dope field 4",
+					"type": "bool",
+					"sequence": 6
+				}
+			],
+			"create": true,
+			"retrieve": true,
+			"update": true,
+			"delete": true
+		}
+	]
+}
