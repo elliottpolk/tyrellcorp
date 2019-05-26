@@ -123,10 +123,6 @@ func Update(ctx context.Context, user string, spec *Spec, db *mongo.Database) er
 	prev.History = nil
 	spec.History = append(spec.History, prev)
 
-	// TODO:
-	// - check for previous item with id
-	// - append to history field if found
-
 	log.WithFields(log.Fields{
 		"user":        user,
 		"action_type": "update",
