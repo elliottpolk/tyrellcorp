@@ -1,0 +1,170 @@
+<template>
+  <b-card header-tag="header" footer-tag="footer" bg-variant="light" class="mt-3 w-75">
+    <template slot="header">
+      <div class="d-flex flex-row font-weight-bold pt-0">New Spec</div>
+    </template>
+
+    <b-form-group label-cols-sm="3" label="Name:" label-align-sm="right" label-for="name-input">
+      <b-form-input id="name-input" v-model="specForm.name" class="w-50"></b-form-input>
+    </b-form-group>
+
+    <b-form-group
+      label-cols-sm="3"
+      label="Package:"
+      label-align-sm="right"
+      label-for="package-input"
+    >
+      <b-form-input id="package-input" v-model="specForm.package" class="w-50"></b-form-input>
+    </b-form-group>
+
+    <b-form-group
+      label-cols-sm="3"
+      label="Repository:"
+      label-align-sm="right"
+      label-for="repository-input"
+    >
+      <b-form-input id="repository-input" v-model="specForm.repository" class="w-50"></b-form-input>
+    </b-form-group>
+
+    <b-form-group label-cols-sm="3" label="Services:" label-align-sm="right" class="mb-0">
+      <div class="d-flex justify-content-around pt-2">
+        <b-form-checkbox switch v-model="specForm.create">Create</b-form-checkbox>
+        <b-form-checkbox switch v-model="specForm.retrieve">Retrieve</b-form-checkbox>
+        <b-form-checkbox switch v-model="specForm.update">Update</b-form-checkbox>
+        <b-form-checkbox switch v-model="specForm.delete">Delete</b-form-checkbox>
+      </div>
+    </b-form-group>
+
+    <b-form-group label-cols-sm="3" label="Fields:" label-align-sm="right" class="mb-0">
+      <b-table
+        striped
+        hover
+        fixed
+        bordered
+        show-empty
+        :items="specForm.fields"
+        :fields="fields"
+        class="tc-b-table"
+      >
+        <template slot="empty">
+          <h5>No Available Fields</h5>
+        </template>
+
+        <template slot="HEAD_show_details">
+          <b-button variant="link" size="sm" style="line-height: .8rem;">
+            <fontawesome icon="plus-square"/>
+          </b-button>
+        </template>
+
+        <template slot="show_details" slot-scope="row">
+          <b-button variant="link" size="sm" @click="row.toggleDetails">
+            <fontawesome :icon="row.detailsShowing ? 'caret-square-up' : 'caret-square-down'"/>
+          </b-button>
+        </template>
+
+        <template slot="row-details" slot-scope="row">
+          <b-card no-body class="d-flex flex-row">
+            <b-col class="p-3">
+              <b-row class="px-3 mb-3 justify-content-between">
+                <div class="font-weight-bold">Description:</div>
+                <div class="text-muted">{{ row.item.description }}</div>
+              </b-row>
+
+              <b-row class="px-3 mb-3 justify-content-between">
+                <span class="font-weight-bold">Field Type:</span>
+                <span class="text-muted">{{ row.item.type }}</span>
+              </b-row>
+
+              <b-row class="px-3 mb-3 justify-content-between">
+                <span class="font-weight-bold">Sequence Number:</span>
+                <span class="text-muted">{{ row.item.sequence}}</span>
+              </b-row>
+
+              <b-row class="px-3 justify-content-between">
+                <b-col class="d-inline-flex flex-column p-0 align-items-start">
+                  <b-form-checkbox switch disabled v-model="row.item.is_list">Is List?</b-form-checkbox>
+                  <b-form-checkbox switch disabled v-model="row.item.is_key">Is Key?</b-form-checkbox>
+                </b-col>
+
+                <b-col class="d-inline-flex p-0 align-items-end flex-row-reverse">
+                  <b-button size="sm" variant="link">
+                    <fontawesome icon="trash"/>
+                  </b-button>
+                </b-col>
+              </b-row>
+            </b-col>
+          </b-card>
+        </template>
+      </b-table>
+    </b-form-group>
+
+    <template slot="footer">
+      <b-button-toolbar class="d-flex flex-row-reverse">
+        <b-button-group size="md" class="mr-1">
+          <b-button>Cancel</b-button>
+          <b-button>Save</b-button>
+        </b-button-group>
+      </b-button-toolbar>
+    </template>
+  </b-card>
+</template>
+
+<script>
+export default {
+  props: {
+    parentState: Object
+  },
+
+  data () {
+    return {
+      specForm: {},
+      fields: [
+        { key: 'name', sortable: false },
+        { key: 'type', sortable: false },
+        { key: 'show_details', label: 'Details', sortable: false }
+      ],
+      fieldTypes: ['double', 'float', 'int32', 'int64', 'bool', 'string', 'bytes'],
+      statuses: ['draft', 'active', 'archived'],
+      api: {
+        baseUrl: '/api/v1/specs'
+      }
+    }
+  },
+
+  watch: {
+    'parentState.replicants': function (val) {
+      console.debug('parent changed')
+      this.specForm = this.parentState.replicants[0]
+    }
+  },
+
+  created () {
+    this.reset()
+
+    if (this.parentState.replicants.length > 0) {
+      this.specForm = this.parentState.replicants[0]
+    }
+  },
+
+  methods: {
+    reset () {
+      this.specForm = {
+        name: '',
+        package: '',
+        respoitory: '',
+        fields: [],
+        create: true,
+        retrieve: true,
+        update: true,
+        delete: true,
+        record_info: {
+          status: this.statuses[0]
+        }
+      }
+    }
+  }
+}
+</script>
+
+<style>
+</style>

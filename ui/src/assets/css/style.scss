@@ -1,0 +1,75 @@
+.btn-primary,
+.btn-danger {
+  background-color: $theme-primary !important;
+  border-color: shade($theme-primary, 20%) !important;
+
+  &:hover {
+    background-color: shade($theme-primary, 20%) !important;
+  }
+  &:active {
+    background-color: shade($theme-primary, 40%) !important;
+  }
+}
+
+.btn-secondary {
+  background-color: $theme-secondary !important;
+  border-color: $theme-secondary-dark !important;
+
+  &:hover {
+    background-color: shade($theme-secondary, 20%) !important;
+  }
+  &:active {
+    background-color: shade($theme-secondary, 40%) !important;
+  }
+}
+
+.container {
+  padding: 0 !important;
+}
+
+.tabs {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+
+  &.row {
+    margin: 0 auto;
+  }
+
+  .col-auto {
+    background-color: $background-primary;
+    padding: 0;
+
+    .nav-tabs {
+      .nav-item {
+        .nav-link {
+          border: 0;
+          border-radius: 0;
+          border-right: 4px solid transparent;
+          color: $text-light-gray-primary;
+
+          &.active {
+            background-color: $background-highlight;
+            color: $text-light-gray-primary;
+          }
+        }
+      }
+    }
+  }
+}
+
+.tc-b-table {
+  .b-table-empty-row {
+    h5 {
+      color: tint($text-dark-gray-primary, 50%);
+    }
+  }
+}
+
+.btn-link {
+  svg[class*=" fa-"] {
+    color: $text-primary;
+  }
+}
