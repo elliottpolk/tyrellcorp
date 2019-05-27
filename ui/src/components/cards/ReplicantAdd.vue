@@ -5,7 +5,7 @@
     </template>
 
     <b-form-group label-cols-sm="3" label="Name:" label-align-sm="right" label-for="name-input">
-      <b-form-input id="name-input" v-model="specForm.name" class="w-50"></b-form-input>
+      <b-form-input id="name-input" type="text" v-model="specForm.name" class="w-50" required></b-form-input>
     </b-form-group>
 
     <b-form-group
@@ -14,7 +14,7 @@
       label-align-sm="right"
       label-for="package-input"
     >
-      <b-form-input id="package-input" v-model="specForm.package" class="w-50"></b-form-input>
+      <b-form-input id="package-input" type="text" v-model="specForm.package" class="w-50" required></b-form-input>
     </b-form-group>
 
     <b-form-group
@@ -23,7 +23,7 @@
       label-align-sm="right"
       label-for="repository-input"
     >
-      <b-form-input id="repository-input" v-model="specForm.repository" class="w-50"></b-form-input>
+      <b-form-input id="repository-input" type="text" v-model="specForm.repository" class="w-50" required></b-form-input>
     </b-form-group>
 
     <b-form-group label-cols-sm="3" label="Services:" label-align-sm="right" class="mb-0">
@@ -51,7 +51,7 @@
         </template>
 
         <template slot="HEAD_show_details">
-          <b-button variant="link" size="sm" style="line-height: .8rem;">
+          <b-button variant="link" size="sm" style="line-height: .8rem;" @click="newField">
             <fontawesome icon="plus-square"/>
           </b-button>
         </template>
@@ -101,11 +101,49 @@
     <template slot="footer">
       <b-button-toolbar class="d-flex flex-row-reverse">
         <b-button-group size="md" class="mr-1">
-          <b-button>Cancel</b-button>
-          <b-button>Save</b-button>
+          <b-button @click="resetSpecForm">Cancel</b-button>
+          <b-button @click="saveSpec">Save</b-button>
         </b-button-group>
       </b-button-toolbar>
     </template>
+
+    <!-- ------------------------------------------------------------------ -->
+    <!-- New Spec Field Modal                                               -->
+    <!-- ------------------------------------------------------------------ -->
+    <b-modal
+      centered
+      id="newFieldModal"
+      @shown="resetFieldForm"
+      title="New Field"
+    >
+
+    <b-form-group label-cols-sm="3" label="Name:" label-align-sm="right" label-for="field-name-input">
+      <b-form-input ref="field-name-input" id="field-name-input" type="text" @blur="valid" v-model="fieldForm.name" class="w-75" required></b-form-input>
+    </b-form-group>
+
+    <b-form-group label-cols-sm="3" label="Description:" label-align-sm="right" label-for="field-description-input">
+      <b-form-textarea ref="field-description-input" id="field-description-input" v-model="fieldForm.description" class="w-75"></b-form-textarea>
+    </b-form-group>
+
+    <b-form-group label-cols-sm="3" label="Field Type:" label-align-sm="right" label-for="field-type-selector">
+      <b-form-select ref="field-type-selector" id="field-type-selector" v-model="fieldForm.type" :options="fieldTypes" required>
+        <template slot="first">
+          <option :value="null">-- Select a type --</option>
+        </template>
+      </b-form-select>
+    </b-form-group>
+
+    <b-form-group label-cols-sm="3" label="Sequence:" label-align-sm="right" label-for="field-sequence-input">
+      <b-form-input ref="field-sequence-input" id="field-sequence-input" type="number" v-model="fieldForm.sequence" class="w-75" required></b-form-input>
+    </b-form-group>
+
+    <b-form-group label-cols-sm="3" label-align-sm="right" class="mb-0">
+      <div class="d-flex justify-content-end pt-2 w-75">
+        <b-form-checkbox switch v-model="fieldForm.is_list" class="ml-4">Is List</b-form-checkbox>
+        <b-form-checkbox switch v-model="fieldForm.is_key" class="ml-4">Is Key</b-form-checkbox>
+      </div>
+    </b-form-group>
+    </b-modal>
   </b-card>
 </template>
 
@@ -118,6 +156,7 @@ export default {
   data () {
     return {
       specForm: {},
+      fieldForm: {},
       fields: [
         { key: 'name', sortable: false },
         { key: 'type', sortable: false },
@@ -134,20 +173,32 @@ export default {
   watch: {
     'parentState.replicants': function (val) {
       console.debug('parent changed')
-      this.specForm = this.parentState.replicants[0]
+      // this.specForm = this.parentState.replicants[0]
     }
   },
 
   created () {
-    this.reset()
+    this.resetSpecForm()
 
-    if (this.parentState.replicants.length > 0) {
-      this.specForm = this.parentState.replicants[0]
-    }
+    // if (this.parentState.replicants.length > 0) {
+    //   this.specForm = this.parentState.replicants[0]
+    // }
+  },
+
+  mounted () {
+    this.newField()
   },
 
   methods: {
-    reset () {
+    valid (event) {
+      console.debug('ref: ', this.$refs[event.target.id])
+      let el = this.$refs[event.target.id]
+      if (el && el !== undefined) {
+        el.state = event.target.value.length > 2
+      }
+    },
+
+    resetSpecForm () {
       this.specForm = {
         name: '',
         package: '',
@@ -161,6 +212,25 @@ export default {
           status: this.statuses[0]
         }
       }
+    },
+
+    resetFieldForm (event) {
+      this.fieldForm = {
+        name: '',
+        description: '',
+        type: '',
+        sequence: 0,
+        is_list: false,
+        is_key: false
+      }
+    },
+
+    newField (event) {
+      this.$bvModal.show('newFieldModal')
+    },
+
+    saveSpec (event) {
+
     }
   }
 }
