@@ -21,7 +21,8 @@
     "bootstrap-vue": "^2.0.0-rc.20",
     "vue": "^2.5.2",
     "vue-resource": "^1.5.1",
-    "vue-router": "^3.0.1"
+    "vue-router": "^3.0.1",
+    "vue-uuid": "^1.1.1"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",

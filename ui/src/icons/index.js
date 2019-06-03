@@ -11,7 +11,8 @@ import {
   faCaretSquareUp,
   faCaretSquareDown,
   faTrash,
-  faEdit
+  faEdit,
+  faCircleNotch
 } from '@fortawesome/free-solid-svg-icons'
 
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
@@ -25,7 +26,8 @@ library.add(
   faCaretSquareUp,
   faCaretSquareDown,
   faTrash,
-  faEdit
+  faEdit,
+  faCircleNotch
 )
 
 Vue.component('fontawesome', FontAwesomeIcon)

@@ -1,13 +1,13 @@
 <template>
   <div class="container">
     <b-tabs vertical class="tc-tabs-v">
-      <b-tab>
+      <b-tab active>
         <template slot="title">
           <fontawesome icon="list"/>
         </template>
         <replicant-list :parentState="sharedState"/>
       </b-tab>
-      <b-tab active>
+      <b-tab>
         <template slot="title">
           <fontawesome icon="plus"/>
         </template>

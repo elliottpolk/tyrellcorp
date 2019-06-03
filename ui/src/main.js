@@ -7,15 +7,17 @@ import icons from './icons'
 
 import vueresource from 'vue-resource'
 import BootstrapVue from 'bootstrap-vue'
+import uuid from 'vue-uuid'
 
 import '@/assets/css/style.scss'
 
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 
+Vue.use(icons)
 Vue.use(vueresource)
 Vue.use(BootstrapVue)
-Vue.use(icons)
+Vue.use(uuid)
 
 Vue.config.productionTip = false
 
