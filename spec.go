@@ -126,7 +126,7 @@ func Update(ctx context.Context, user string, spec *Spec, db *mongo.Database) er
 	log.WithFields(log.Fields{
 		"user":        user,
 		"action_type": "update",
-	}).Infof("attempting to update record with ID %s", spec.Id)
+	}).Infof("updating record with ID %s", spec.Id)
 
 	spec.RecordInfo.Updated = &timestamp.Timestamp{Seconds: time.Now().Unix()}
 	spec.RecordInfo.UpdatedBy = user
@@ -162,7 +162,7 @@ func Delete(ctx context.Context, user string, items []*Spec, db *mongo.Database)
 	log.WithFields(log.Fields{
 		"user":        user,
 		"action_type": "delete",
-	}).Infof("attempting to delete %d records", len(items))
+	}).Infof("deleting %d records", len(items))
 
 	res, err := db.Collection(repo).DeleteMany(ctx, bson.D{{"_id", bson.D{{"$in", ids}}}})
 	if err != nil {

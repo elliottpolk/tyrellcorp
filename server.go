@@ -65,7 +65,13 @@ func (s *Server) Create(c context.Context, r *SpecRequest) (*Empty, error) {
 		if err := GenerateReplicant(spec); err != nil {
 			return empty, errors.Wrapf(err, "unable to generate the replicant %s", spec.Name)
 		}
-		log.Debugf("replicant %s generated", spec.Name)
+		log.Debugf("replicant %s generated, updating state", spec.Name)
+
+		// update the state to 'generated'
+		spec.State = Generated
+		if err := Update(c, spec.RecordInfo.CreatedBy, spec, client.Database(repo)); err != nil {
+			return empty, errors.Wrapf(err, "unable to update state to new replicant spec %s", spec.Name)
+		}
 	}
 
 	// TODO:
