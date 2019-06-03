@@ -33,6 +33,15 @@
             <b-card no-body class="p-4">
               <b-form-group
                 label-cols-sm="3"
+                label="ID:"
+                label-align-sm="right"
+                label-for="id-input"
+              >
+                <b-form-input id="id-input" type="text" v-model="row.item.id" class="w-75" disabled></b-form-input>
+              </b-form-group>
+
+              <b-form-group
+                label-cols-sm="3"
                 label="Repository:"
                 label-align-sm="right"
                 label-for="repository-input"
@@ -41,7 +50,7 @@
                   id="repository-input"
                   type="text"
                   v-model="row.item.repository"
-                  class="w-50"
+                  class="w-75"
                   disabled
                 ></b-form-input>
               </b-form-group>

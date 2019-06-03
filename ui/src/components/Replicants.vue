@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <b-tabs vertical class="tc-tabs-v">
+    <b-tabs vertical v-model="sharedState.tabIndex" class="tc-tabs-v">
       <b-tab active>
         <template slot="title">
           <fontawesome icon="list"/>
@@ -25,29 +25,7 @@ let store = {
   debug: true,
   state: {
     replicants: [],
-    addReplicants: function (values) {
-      if (this.debug) {
-        console.debug('adding replicants', values)
-      }
-      values.forEach(v => {
-        this.replicants.push(v)
-      })
-      this.displayed = this.replicants
-    },
-    addReplicant: function (value) {
-      if (this.debug) {
-        console.debug('adding replicant', value)
-      }
-      this.replicants.push(value)
-      this.displayed = this.replicants
-    },
-    removeReplicant: function (value) {
-      if (this.debug) {
-        console.debug('removing replicant', value)
-      }
-      this.replicants = this.replicants.filter(v => v.id !== value.id)
-      this.displayed = this.replicants
-    }
+    tabIndex: 0
   }
 }
 

@@ -306,9 +306,7 @@ export default {
       this.saving = true
 
       let form = JSON.parse(JSON.stringify(this.specForm))
-      form.record_info = {
-        status: this.statuses.active
-      }
+      form.record_info.status = this.statuses.active
 
       let req = {
         request_id: this.$uuid.v4(),
@@ -335,6 +333,7 @@ export default {
         console.error(err)
       }).then(() => {
         this.saving = false
+        this.parentState.tabIndex = 0
       })
     }
   }
