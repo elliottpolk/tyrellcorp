@@ -163,6 +163,7 @@
       @shown="resetFieldForm"
       @ok="handleFieldOk"
       title="New Field"
+      hide-header-close
     >
       <b-form-group
         label-cols-sm="3"
