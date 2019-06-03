@@ -4,6 +4,22 @@
       <div class="d-flex flex-row font-weight-bold pt-0">New Spec</div>
     </template>
 
+    <b-form-group
+      label-cols-sm="3"
+      label="Username:"
+      label-align-sm="right"
+      label-for="username-input"
+    >
+      <b-form-input
+        id="username-input"
+        type="text"
+        v-model="specForm.record_info.created_by"
+        class="w-50"
+        required
+        :disabled="saving"
+      ></b-form-input>
+    </b-form-group>
+
     <b-form-group label-cols-sm="3" label="Name:" label-align-sm="right" label-for="name-input">
       <b-form-input
         id="name-input"
@@ -302,8 +318,7 @@ export default {
 
       let form = JSON.parse(JSON.stringify(this.specForm))
       form.record_info = {
-        status: this.statuses.active,
-        created_by: 'it is me'
+        status: this.statuses.active
       }
 
       let req = {
