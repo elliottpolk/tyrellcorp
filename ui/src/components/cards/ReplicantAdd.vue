@@ -211,22 +211,6 @@
         </b-form-select>
       </b-form-group>
 
-      <b-form-group
-        label-cols-sm="3"
-        label="Sequence:"
-        label-align-sm="right"
-        label-for="field-sequence-input"
-      >
-        <b-form-input
-          ref="field-sequence-input"
-          id="field-sequence-input"
-          type="number"
-          v-model="fieldForm.sequence"
-          class="w-75"
-          required
-        ></b-form-input>
-      </b-form-group>
-
       <b-form-group label-cols-sm="3" label-align-sm="right" class="mb-0">
         <div class="d-flex justify-content-end pt-2 w-75">
           <b-form-checkbox switch v-model="fieldForm.is_list" class="ml-4">Is List</b-form-checkbox>
@@ -306,7 +290,12 @@ export default {
     },
 
     handleFieldOk (event) {
-      this.specForm.fields.push(JSON.parse(JSON.stringify(this.fieldForm)))
+      let form = JSON.parse(JSON.stringify(this.fieldForm))
+
+      // the first 2 are reserved and we want 1 more than the current fields
+      form.sequence = this.specForm.fields.length + 3
+
+      this.specForm.fields.push(form)
     },
 
     newField (event) {
